@@ -1,5 +1,8 @@
 package com.stark.shop.user;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +18,6 @@ import java.util.Date;
 @Entity
 @Table(name = "users")
 public class UserEntity {
-    // id, username, password, fullname, email, date_created(timestamp)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,7 +40,7 @@ public class UserEntity {
 
     public UserEntity(String username, String password, String fullname, String email) {
         this.username = username;
-        this.password = password;
+        this.password = encodePassword(password);
         this.fullname = fullname;
         this.email = email;
     }
@@ -76,8 +78,18 @@ public class UserEntity {
     }
 
     public void setPassword(String password) {
-        this.password = password;
-    }   
+        this.password = encodePassword(password);
+    }
+
+    public boolean checkPassword(String plainPassword) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.matches(plainPassword, this.password);
+    }
+
+    private String encodePassword(String password) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(password);
+    }
 
     @Override
     public String toString() {

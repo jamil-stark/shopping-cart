@@ -37,4 +37,9 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable("userId") Long userId) {
         return userService.deleteUser(userId);
     }
+
+    @PostMapping(path = "login/")
+    public ResponseEntity<Map<String, Object>> loginUser(@RequestBody Map<String, String> loginRequest) {
+        return userService.loginUser(loginRequest);
+    }    
 }

@@ -54,4 +54,26 @@ public class UserService {
         response.put("message", "User deleted successfully");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    public ResponseEntity<Map<String, Object>> loginUser(Map<String, String> loginRequest) {
+        String username = (String) loginRequest.get("username");
+        String password = (String) loginRequest.get("password");
+        Map<String, Object> response = new HashMap<>();
+        Optional<UserEntity> userOptional = userRepository.findByUsername(username);
+        if (!userOptional.isPresent()) {
+            response.put("status", HttpStatus.BAD_REQUEST.value());
+            response.put("message", "Invalid username or password");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        UserEntity user = userOptional.get();
+        if (!user.checkPassword(password)) {
+            response.put("status", HttpStatus.BAD_REQUEST.value());
+            response.put("message", "Invalid username or password");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        response.put("status", HttpStatus.OK.value());
+        response.put("message", "Login successful");
+        response.put("data", user);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
