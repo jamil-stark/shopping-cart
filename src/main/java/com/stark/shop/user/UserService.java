@@ -24,8 +24,9 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<UserEntity> getAllUsers() {
-        return userRepository.findAll();
+    public ResponseEntity<Map<String, Object>> getAllUsers() {
+        List<UserEntity> users = userRepository.findAll();
+        return customJSONResponse.returnStatusAndMessage(HttpStatus.OK, "Users retrieved successfully", users);
     }
 
     public ResponseEntity<Map<String, Object>> createUser(@RequestBody UserEntity user) {
@@ -38,12 +39,7 @@ public class UserService {
             return customJSONResponse.returnStatusAndMessage(HttpStatus.BAD_REQUEST, "Email already taken");
         }
         UserEntity newUser = userRepository.save(user);
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", HttpStatus.CREATED.value());
-        response.put("message", "User created successfully");
-        response.put("data", newUser);
-        response.put("token", newUser.getToken());
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return customJSONResponse.returnStatusAndMessage(HttpStatus.CREATED, "User Created Successfully!", newUser, newUser.getToken());
     }
 
     public ResponseEntity<Map<String, Object>> deleteUser(Long userId) {
@@ -74,10 +70,6 @@ public class UserService {
             return customJSONResponse.returnStatusAndMessage(HttpStatus.BAD_REQUEST, "Invalid username or password");
         }
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", HttpStatus.OK.value());
-        response.put("message", "Login successful");
-        response.put("data", user);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return customJSONResponse.returnStatusAndMessage(HttpStatus.OK, "User logged in successfully", user, user.getToken());
     }
 }

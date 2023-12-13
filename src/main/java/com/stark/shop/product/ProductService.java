@@ -45,19 +45,12 @@ public class ProductService {
         if (!productOptional.isPresent()) {
             return customJSONResponse.returnStatusAndMessage(HttpStatus.NOT_FOUND, "Product not found");
         }
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", HttpStatus.OK.value());
-        response.put("message", "Product retrieved successfully");
-        response.put("data", productOptional.get());
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        return customJSONResponse.returnStatusAndMessage(HttpStatus.OK, "Product retrieved successfully", productOptional.get());
     }
 
     public ResponseEntity<Map<String, Object>> getAllProducts() {
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", HttpStatus.OK.value());
-        response.put("message", "Products retrieved successfully");
-        response.put("data", productRepository.findAll());
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return customJSONResponse.returnStatusAndMessage(HttpStatus.OK, "Products retrieved successfully", productRepository.findAll());
     }
 
 }
