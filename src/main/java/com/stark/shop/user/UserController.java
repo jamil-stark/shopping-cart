@@ -1,8 +1,10 @@
 package com.stark.shop.user;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,12 +29,12 @@ public class UserController {
     }
     
     @PostMapping
-    public void createUser(@RequestBody UserEntity user) {
-        userService.createUser(user);
+    public ResponseEntity<Map<String, Object>> createUser(@RequestBody UserEntity user) {
+        return userService.createUser(user);
     }
 
     @DeleteMapping(path = "{userId}/")
-    public void deleteUser(@PathVariable("userId") Long userId) {
-        userService.deleteUser(userId);
+    public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable("userId") Long userId) {
+        return userService.deleteUser(userId);
     }
 }
