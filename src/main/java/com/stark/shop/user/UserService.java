@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.stark.shop.utilities.CustomJSONResponse;
@@ -29,7 +28,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    @PostMapping
     public ResponseEntity<Map<String, Object>> createUser(@RequestBody UserEntity user) {
         Optional<UserEntity> userOptional = userRepository.findByUsername(user.getUsername().toLowerCase());
         if (userOptional.isPresent()) {
