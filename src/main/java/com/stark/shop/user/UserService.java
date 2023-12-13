@@ -17,4 +17,8 @@ public class UserService {
     public List<UserEntity> getAllUsers() {
         return userRepository.findAll();
     }
+
+    public void createUser(UserEntity user) {
+        System.out.println(user);
+    }
 }

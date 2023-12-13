@@ -75,6 +75,10 @@ public class UserEntity {
         this.email = email;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }   
+
     @Override
     public String toString() {
         return "UserEntity [dateCreated=" + dateCreated + ", email=" + email + ", fullname=" + fullname + ", id=" + id
