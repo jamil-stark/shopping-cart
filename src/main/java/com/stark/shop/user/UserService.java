@@ -28,7 +28,14 @@ public class UserService {
         if (userOptional.isPresent()) {
             throw new IllegalStateException("Email already taken");
         }
-        userRepository.save(user);
-        
+        userRepository.save(user);       
+    }
+
+    public void deleteUser(Long userId) {
+        boolean exists = userRepository.existsById(userId);
+        if (!exists) {
+            throw new IllegalStateException("User with id " + userId + " does not exist");
+        }
+        userRepository.deleteById(userId);
     }
 }
