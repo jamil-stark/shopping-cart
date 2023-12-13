@@ -41,4 +41,10 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> loginUser(@RequestBody Map<String, String> loginRequest) {
         return userService.loginUser(loginRequest);
     }    
+
+    @GetMapping(path = "get-user-by-token/")
+    public ResponseEntity<Map<String, Object>> getUserByToken(@RequestBody Map<String, String> tokenRequest) {
+        return userService.getUserByToken(tokenRequest);
+    }
+
 }

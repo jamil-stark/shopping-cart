@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.stark.shop.product.ProductEntity;
 import com.stark.shop.utilities.CustomJSONResponse;
 
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,8 @@ public class UserService {
             return customJSONResponse.returnStatusAndMessage(HttpStatus.BAD_REQUEST, "Email already taken");
         }
         UserEntity newUser = userRepository.save(user);
-        return customJSONResponse.returnStatusAndMessage(HttpStatus.CREATED, "User Created Successfully!", newUser, newUser.getToken());
+        return customJSONResponse.returnStatusAndMessage(HttpStatus.CREATED, "User Created Successfully!", newUser,
+                newUser.getToken());
     }
 
     public ResponseEntity<Map<String, Object>> deleteUser(Long userId) {
@@ -69,6 +71,26 @@ public class UserService {
             return customJSONResponse.returnStatusAndMessage(HttpStatus.BAD_REQUEST, "Invalid username or password");
         }
 
-        return customJSONResponse.returnStatusAndMessage(HttpStatus.OK, "User logged in successfully", user, user.getToken());
+        return customJSONResponse.returnStatusAndMessage(HttpStatus.OK, "User logged in successfully", user,
+                user.getToken());
+    }
+
+    public ResponseEntity<Map<String, Object>> getUserByToken(Map<String, String> tokenRequest) {
+        String token = (String) tokenRequest.get("token");
+
+        if (token == null || token.isEmpty()) {
+            return customJSONResponse.returnStatusAndMessage(HttpStatus.BAD_REQUEST, "No token provided");
+        }
+
+        Optional<UserEntity> userOptional = userRepository.findByToken(token);
+        if (!userOptional.isPresent()) {
+            return customJSONResponse.returnStatusAndMessage(HttpStatus.BAD_REQUEST, "Invalid token");
+        }
+
+        UserEntity user = userOptional.get();
+
+        return customJSONResponse.returnStatusAndMessage(HttpStatus.OK, "User retrieved successfully", user,
+                user.getToken());
+
     }
 }
