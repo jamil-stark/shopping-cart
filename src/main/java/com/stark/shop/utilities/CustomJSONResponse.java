@@ -6,8 +6,6 @@ import java.util.HashMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import jakarta.persistence.criteria.CriteriaBuilder.In;
-
 public class CustomJSONResponse {
     public ResponseEntity<Map<String, Object>> returnStatusAndMessage(HttpStatus status, String message) {
         Map<String, Object> response = new HashMap<>();
