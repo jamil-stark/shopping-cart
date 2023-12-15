@@ -21,7 +21,7 @@ public class ProductEntity {
     private String description;
     private String category;
     private Integer price;
-    private Integer quantity;
+    private Integer inStock;
     private String imageURL;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -39,13 +39,13 @@ public class ProductEntity {
     public ProductEntity() {
     }
 
-    public ProductEntity(String name, String description, String category, Integer price, Integer quantity,
+    public ProductEntity(String name, String description, String category, Integer price, Integer inStock,
             String imageURL) {
         this.name = name;
         this.description = description;
         this.category = category;
         this.price = price;
-        this.quantity = quantity;
+        this.inStock = inStock;
         this.imageURL = imageURL;
     }
 
@@ -70,8 +70,8 @@ public class ProductEntity {
         return price;
     }
 
-    public Integer getQuantity() {
-        return quantity;
+    public Integer getInStock() {
+        return inStock;
     }
 
     public String getImageURL() {
@@ -101,8 +101,8 @@ public class ProductEntity {
         this.price = price;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public void setInStock(Integer inStock) {
+        this.inStock = inStock;
     }
 
     public void setImageURL(String imageURL) {
@@ -113,7 +113,7 @@ public class ProductEntity {
     @Override
     public String toString() {
         return "ProductEntity [category=" + category + ", dateCreated=" + dateCreated + ", description=" + description
-                + ", id=" + id + ", image=" + imageURL + ", name=" + name + ", price=" + price + ", quantity=" + quantity
+                + ", id=" + id + ", image=" + imageURL + ", name=" + name + ", price=" + price + ", inStock=" + inStock
                 + "]";
     }
     

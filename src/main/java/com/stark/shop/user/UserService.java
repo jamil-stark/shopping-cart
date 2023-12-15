@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.stark.shop.product.ProductEntity;
 import com.stark.shop.utilities.CustomJSONResponse;
 
 import org.springframework.http.HttpStatus;
