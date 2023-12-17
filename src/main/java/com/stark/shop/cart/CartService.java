@@ -38,13 +38,7 @@ public class CartService {
 
     public ResponseEntity<Map<String, Object>> createCart(@RequestBody List<CartItemRequest> cartItems, String token) {
         try {
-            token = token.substring(7);
-            Optional<UserEntity> userOptional = userRepository.findByToken(token);
-            if (!userOptional.isPresent()) {
-                return customJSONResponse.returnStatusAndMessage(HttpStatus.BAD_REQUEST, token);
-            }
-
-            UserEntity user = userOptional.get();
+            UserEntity user = validateTokenAndGetUser(token);
             Optional<CartEntity> cartOptional = cartRepository.findByUserId(user.getId());
             if (cartOptional.isPresent()) {
                 for (CartItemRequest cartItemRequest : cartItems) {
@@ -111,15 +105,7 @@ public class CartService {
 
     public ResponseEntity<Map<String, Object>> getCart(String token) {
         try {
-            token = token.substring(7);
-            Optional<UserEntity> userOptional = userRepository.findByToken(token);
-            if (!userOptional.isPresent()) {
-                return customJSONResponse.returnStatusAndMessage(
-                        HttpStatus.NOT_FOUND,
-                        "User not found");
-            }
-
-            UserEntity user = userOptional.get();
+            UserEntity user = validateTokenAndGetUser(token);
             Optional<CartEntity> cartOptional = cartRepository.findByUserId(user.getId());
             if (!cartOptional.isPresent()) {
                 return customJSONResponse.returnStatusAndMessage(
@@ -140,4 +126,67 @@ public class CartService {
         }
     }
 
+    public ResponseEntity<Map<String, Object>> deleteCartItem(Long cartItemId, String token) {
+        try {
+            UserEntity user = validateTokenAndGetUser(token);
+            Optional<CartEntity> cartOptional = cartRepository.findByUserId(user.getId());
+            if (!cartOptional.isPresent()) {
+                return customJSONResponse.returnStatusAndMessage(
+                        HttpStatus.BAD_REQUEST,
+                        "Cart not found");
+            }
+
+            Optional<CartItemEntity> cartItemOptional = cartItemRepository.findById(cartItemId);
+            if (!cartItemOptional.isPresent()) {
+                return customJSONResponse.returnStatusAndMessage(
+                        HttpStatus.BAD_REQUEST,
+                        "Cart item not found");
+            }
+
+            CartItemEntity cartItem = cartItemOptional.get();
+            cartItemRepository.delete(cartItem);
+            List<CartItemEntity> cartItems = cartItemRepository.findAllByCartId(cartOptional.get().getId());
+            return customJSONResponse.returnStatusAndMessage(
+                    HttpStatus.OK,
+                    "Cart item deleted successfully",
+                    cartItems,
+                    cartItems.size());
+
+
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+
+
+    private UserEntity validateTokenAndGetUser(String token) {
+        try {
+            if (token == null || token.isEmpty()) {
+                throw new RuntimeException("Token is required");
+            }
+
+            String[] tokenParts = token.split(" ");
+            if (tokenParts.length != 2) {
+                throw new RuntimeException("Invalid token");
+            }
+
+            String tokenType = tokenParts[0];
+
+            if (!tokenType.equals("Bearer")) {
+                throw new RuntimeException("Invalid token type");
+            }
+
+            String tokenValue = tokenParts[1];
+            Optional<UserEntity> userOptional = userRepository.findByToken(tokenValue);
+            if (!userOptional.isPresent()) {
+                throw new RuntimeException("Invalid token");
+            }
+
+            return userOptional.get();
+        } catch (Exception e) {
+            throw e;
+        }
+        
+    }
 }
