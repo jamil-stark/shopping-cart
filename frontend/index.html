@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+    }
+    .navbar {
+      background-color: #343a40;
+      color: white;
+    }
+    .product {
+      margin-bottom: 20px;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .quantity-adjust {
+      display: flex;
+      align-items: center;
+    }
+    .quantity-adjust button {
+      margin: 0 5px;
+    }
+  </style>
+  <title>Electronics Shop</title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <a class="navbar-brand" href="#">Electronics Shop</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="#">Login/Register</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" data-toggle="modal" data-target="#cartModal">
+          <i class="fas fa-shopping-cart"></i> Cart
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-4 product">
+        <img src="assets/images/Back-Wall-Photo.jpg" alt="Product 1" class="img-fluid">
+        <h4>Product 1</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <div class="quantity-adjust">
+        </div>
+        <button class="btn btn-primary" onclick="addToCart('Product 1', 1, 49.99)">Add to Cart</button>
+      </div>
+      <div class="col-md-4 product">
+        <img src="assets/images/Back-Wall-Photo.jpg" alt="Product 1" class="img-fluid">
+        <h4>Product 1</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <div class="quantity-adjust">
+        </div>
+        <button class="btn btn-primary" onclick="addToCart('Product 1', 1, 49.99)">Add to Cart</button>
+      </div>
+      <div class="col-md-4 product">
+        <img src="assets/images/Back-Wall-Photo.jpg" alt="Product 1" class="img-fluid">
+        <h4>Product 1</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <div class="quantity-adjust">
+        </div>
+        <button class="btn btn-primary" onclick="addToCart('Product 1', 1, 49.99)">Add to Cart</button>
+      </div>
+      <div class="col-md-4 product">
+        <img src="assets/images/Back-Wall-Photo.jpg" alt="Product 1" class="img-fluid">
+        <h4>Product 1</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <div class="quantity-adjust">
+        </div>
+        <button class="btn btn-primary" onclick="addToCart('Product 1', 1, 49.99)">Add to Cart</button>
+      </div>
+      <div class="col-md-4 product">
+        <img src="assets/images/Back-Wall-Photo.jpg" alt="Product 1" class="img-fluid">
+        <h4>Product 1</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <div class="quantity-adjust">
+        </div>
+        <button class="btn btn-primary" onclick="addToCart('Product 1', 1, 49.99)">Add to Cart</button>
+      </div>
+              
+    <!-- ... (Repeat for other products) -->
+  </div>
+</div>
+
+<!-- Cart Modal -->
+<div class="modal" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cartModalLabel">Shopping Cart</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="cartItems">
+        <!-- Cart items will be displayed here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Checkout</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+  // Array to store cart items
+  var cartItems = [];
+
+  // Function to add items to the cart
+  function addToCart(productName, quantity, price) {
+    var existingItem = cartItems.find(item => item.name === productName);
+
+    if (existingItem) {
+      existingItem.quantity += quantity;
+    } else {
+      cartItems.push({ name: productName, quantity, price });
+    }
+
+    updateCartDisplay();
+  }
+
+  // Function to adjust the quantity of items in the cart
+  function adjustQuantity(productName, adjustment) {
+    var item = cartItems.find(item => item.name === productName);
+
+    if (item) {
+      item.quantity += adjustment;
+      if (item.quantity < 1) {
+        // Remove item if quantity is zero or negative
+        cartItems = cartItems.filter(i => i.name !== productName);
+      }
+      updateCartDisplay();
+    }
+  }
+
+  // Function to update the cart display in the modal
+  function updateCartDisplay() {
+    var cartItemsContainer = document.getElementById('cartItems');
+    cartItemsContainer.innerHTML = '';
+
+    cartItems.forEach(item => {
+      var cartItem = document.createElement('div');
+      cartItem.classList.add('cart-item');
+
+      var quantityAdjust = document.createElement('div');
+      quantityAdjust.classList.add('quantity-adjust');
+      quantityAdjust.innerHTML = `
+        <button class="btn btn-secondary" onclick="adjustQuantity('${item.name}', -1)">-</button>
+        <span>${item.quantity}</span>
+        <button class="btn btn-secondary" onclick="adjustQuantity('${item.name}', 1)">+</button>
+      `;
+
+      var itemName = document.createElement('span');
+      itemName.textContent = item.name;
+
+      var removeButton = document.createElement('button');
+      removeButton.classList.add('btn', 'btn-danger');
+      removeButton.textContent = 'Remove';
+      removeButton.onclick = function () {
+        cartItems = cartItems.filter(i => i.name !== item.name);
+        updateCartDisplay();
+      };
+
+      cartItem.appendChild(quantityAdjust);
+      cartItem.appendChild(itemName);
+      cartItem.appendChild(removeButton);
+
+      cartItemsContainer.appendChild(cartItem);
+    });
+  }
+</script>
+</body>
+</html>
