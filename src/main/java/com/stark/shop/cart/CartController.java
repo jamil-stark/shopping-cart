@@ -40,8 +40,8 @@ public class CartController {
     }
 
 
-    @DeleteMapping(path = "{cartId}/")
-    public ResponseEntity<Map<String, Object>> deleteCartItem(@PathVariable("cartId") Long cartId, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        return cartService.deleteCartItem(cartId, token);
+    @DeleteMapping(path = "{productId}/")
+    public ResponseEntity<Map<String, Object>> deleteCartItem(@PathVariable("productId") Long productId, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return cartService.deleteCartItem(productId, token);
     }
 }

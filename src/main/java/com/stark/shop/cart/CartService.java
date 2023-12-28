@@ -126,7 +126,7 @@ public class CartService {
         }
     }
 
-    public ResponseEntity<Map<String, Object>> deleteCartItem(Long cartItemId, String token) {
+    public ResponseEntity<Map<String, Object>> deleteCartItem(Long productId, String token) {
         try {
             UserEntity user = validateTokenAndGetUser(token);
             Optional<CartEntity> cartOptional = cartRepository.findByUserId(user.getId());
@@ -135,8 +135,14 @@ public class CartService {
                         HttpStatus.BAD_REQUEST,
                         "Cart not found");
             }
-
-            Optional<CartItemEntity> cartItemOptional = cartItemRepository.findById(cartItemId);
+            Optional<ProductEntity> productOptional = productRepository.findById(productId);
+            if (!productOptional.isPresent()) {
+                return customJSONResponse.returnStatusAndMessage(
+                        HttpStatus.NOT_FOUND,
+                        "Product not found");
+            }
+            ProductEntity product = productOptional.get();
+            Optional<CartItemEntity> cartItemOptional = cartItemRepository.findByProductAndCartId(product, cartOptional.get().getId());
             if (!cartItemOptional.isPresent()) {
                 return customJSONResponse.returnStatusAndMessage(
                         HttpStatus.BAD_REQUEST,
