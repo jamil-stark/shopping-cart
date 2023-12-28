@@ -1,5 +1,7 @@
+<pre>
+<b>src/main/resources/application.properties</b>
 
-**src/main/resources/application.properties**
+```
 spring.datasource.url=jdbc:postgresql://HOST:PORT/DATABASE
 spring.datasource.username=USERNAME
 spring.datasource.password=PASSWORD
@@ -10,3 +12,5 @@ spring.jpa.properties.hibernate.format_sql=true
 server.error.include-message=always
 spring.timezone=EAT
 server.servlet.context-path=/api/v1/
+```
+</pre>
