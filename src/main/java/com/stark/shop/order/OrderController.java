@@ -31,8 +31,8 @@ public class OrderController {
         return orderService.getOrdersAsAUser(token);
     }
 
-    @GetMapping("all")
-    public ResponseEntity<Map<String, Object>> getAllOrders(){
-        return orderService.getAllOrders();
+    @GetMapping("all/")
+    public ResponseEntity<Map<String, Object>> getAllOrders(@RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+        return orderService.getAllOrders(token);
     }
 }

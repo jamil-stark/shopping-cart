@@ -25,6 +25,7 @@ import java.util.Date;
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Long id;
     @Column(unique = true) 
     private String username;
@@ -41,6 +42,7 @@ public class UserEntity {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date_created")
+    @JsonIgnore
     private Date dateCreated;
 
     @PrePersist
@@ -124,7 +126,7 @@ public class UserEntity {
         this.token = token;
     }
 
-    private String getRole() {
+    public String getRole() {
         return role;
     }
 

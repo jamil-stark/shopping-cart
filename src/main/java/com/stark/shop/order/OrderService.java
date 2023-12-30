@@ -1,5 +1,6 @@
 package com.stark.shop.order;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -87,17 +88,27 @@ public class OrderService {
         try{
             UserEntity user = Helpers.validateTokenAndGetUser(token, userRepository);
             List<OrderEntity> orders = orderRepository.findAllByUserId(user.getId());
-            return customJSONResponse.returnStatusAndMessage(HttpStatus.OK, "Orders retrieved", orders);
+            for (OrderEntity order : orders) {
+                order.setOrderItems(orderItemRepository.findAllByOrderId(order.getId()));
+            }
+            return customJSONResponse.returnStatusAndMessage(HttpStatus.OK, user.getFullname() + "'s Orders retrieved", orders, orders.size());
         }
         catch (Exception e) {
             return customJSONResponse.returnStatusAndMessage(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
-    public ResponseEntity<Map<String, Object>> getAllOrders() {
+    public ResponseEntity<Map<String, Object>> getAllOrders(String token) {
         try{
+            UserEntity user = Helpers.validateTokenAndGetUser(token, userRepository);
+            if(!user.getRole().equals("admin")){
+                return customJSONResponse.returnStatusAndMessage(HttpStatus.UNAUTHORIZED, "Unauthorized");
+            }
             List<OrderEntity> orders = orderRepository.findAll();
-            return customJSONResponse.returnStatusAndMessage(HttpStatus.OK, "Orders retrieved", orders);
+            for (OrderEntity order : orders) {
+                order.setOrderItems(orderItemRepository.findAllByOrderId(order.getId()));
+            }
+            return customJSONResponse.returnStatusAndMessage(HttpStatus.OK, "All Orders retrieved", orders, orders.size());
         }
         catch (Exception e) {
             return customJSONResponse.returnStatusAndMessage(HttpStatus.BAD_REQUEST, e.getMessage());

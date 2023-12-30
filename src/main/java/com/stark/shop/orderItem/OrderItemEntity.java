@@ -1,5 +1,6 @@
 package com.stark.shop.orderItem;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.stark.shop.order.OrderEntity;
 import com.stark.shop.product.ProductEntity;
 
@@ -18,6 +19,7 @@ public class OrderItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderItemId;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "order_id")
     private OrderEntity order;

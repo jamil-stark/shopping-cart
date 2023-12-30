@@ -1,10 +1,13 @@
 package com.stark.shop.order;
 
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.stark.shop.orderItem.OrderItemEntity;
 import com.stark.shop.user.UserEntity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -24,12 +28,16 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
     @Column(name = "status")
     private String status;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItemEntity> orderItems;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date_created")
@@ -66,6 +74,16 @@ public class OrderEntity {
         this.dateUpdated = dateUpdated;
     }
 
+    public OrderEntity(Long id, UserEntity user, String status, Date dateCreated, Date dateUpdated,
+            List<OrderItemEntity> orderItems) {
+        this.id = id;
+        this.user = user;
+        this.status = status;
+        this.dateCreated = dateCreated;
+        this.dateUpdated = dateUpdated;
+        this.orderItems = orderItems;
+    }
+
     public Long getId() {
         return this.id;
     }
@@ -97,16 +115,22 @@ public class OrderEntity {
     public String getStatus() {
         return this.status;
     }
-    
 
+    public List<OrderItemEntity> getOrderItems(){
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItemEntity> orderItems){
+        this.orderItems = orderItems;
+    }
 
     @Override
     public String toString() {
         return "{" +
-            " id='" + getId() + "'" +
-            ", user='" + getUser() + "'" +
-            ", dateCreated='" + getDateCreated() + "'" +
-            ", dateUpdated='" + getDateUpdated() + "'" +
-            "}";
+                " id='" + getId() + "'" +
+                ", user='" + getUser() + "'" +
+                ", dateCreated='" + getDateCreated() + "'" +
+                ", dateUpdated='" + getDateUpdated() + "'" +
+                "}";
     }
 }
