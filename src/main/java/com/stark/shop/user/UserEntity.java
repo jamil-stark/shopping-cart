@@ -33,6 +33,8 @@ public class UserEntity {
     @Column(unique = true)
     private String email;
 
+    private String role;
+    
     @Column(unique = true)
     @JsonIgnore
     private String token;
@@ -51,6 +53,7 @@ public class UserEntity {
             email = email.toLowerCase();
         }
         this.token = generateRandomToken();
+        this.role = "user";
     }
 
     public UserEntity() {
@@ -121,10 +124,18 @@ public class UserEntity {
         this.token = token;
     }
 
+    private String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "UserEntity [dateCreated=" + dateCreated + ", email=" + email + ", fullname=" + fullname + ", id=" + id
-                + ", password=" + password + ", username=" + username + "]";
+                + ", password=" + password + ", username=" + username + ", role=" + role + "]";
     }
 
 }
