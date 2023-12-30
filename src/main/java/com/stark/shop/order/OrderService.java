@@ -83,10 +83,20 @@ public class OrderService {
         }
     }
 
-    public ResponseEntity<Map<String, Object>> getOrders(String token) {
+    public ResponseEntity<Map<String, Object>> getOrdersAsAUser(String token) {
         try{
             UserEntity user = Helpers.validateTokenAndGetUser(token, userRepository);
             List<OrderEntity> orders = orderRepository.findAllByUserId(user.getId());
+            return customJSONResponse.returnStatusAndMessage(HttpStatus.OK, "Orders retrieved", orders);
+        }
+        catch (Exception e) {
+            return customJSONResponse.returnStatusAndMessage(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    public ResponseEntity<Map<String, Object>> getAllOrders() {
+        try{
+            List<OrderEntity> orders = orderRepository.findAll();
             return customJSONResponse.returnStatusAndMessage(HttpStatus.OK, "Orders retrieved", orders);
         }
         catch (Exception e) {

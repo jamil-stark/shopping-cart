@@ -28,6 +28,11 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> getOrders(@RequestHeader(HttpHeaders.AUTHORIZATION) String token){
-        return orderService.getOrders(token);
+        return orderService.getOrdersAsAUser(token);
+    }
+
+    @GetMapping("all")
+    public ResponseEntity<Map<String, Object>> getAllOrders(){
+        return orderService.getAllOrders();
     }
 }
