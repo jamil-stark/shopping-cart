@@ -76,6 +76,7 @@ public class OrderService {
                 orderItemRepository.save(orderItem);
                 cartItemRepository.delete(cartItemEntity);
             }
+            order.setOrderItems(orderItemRepository.findAllByOrderId(order.getId()));
             cartRepository.delete(cartOptional.get());
             return customJSONResponse.returnStatusAndMessage(HttpStatus.OK, "Order created", order);
         }
@@ -88,9 +89,9 @@ public class OrderService {
         try{
             UserEntity user = Helpers.validateTokenAndGetUser(token, userRepository);
             List<OrderEntity> orders = orderRepository.findAllByUserId(user.getId());
-            for (OrderEntity order : orders) {
-                order.setOrderItems(orderItemRepository.findAllByOrderId(order.getId()));
-            }
+            // for (OrderEntity order : orders) {
+            //     order.setOrderItems(orderItemRepository.findAllByOrderId(order.getId()));
+            // }
             return customJSONResponse.returnStatusAndMessage(HttpStatus.OK, user.getFullname() + "'s Orders retrieved", orders, orders.size());
         }
         catch (Exception e) {
@@ -105,9 +106,9 @@ public class OrderService {
                 return customJSONResponse.returnStatusAndMessage(HttpStatus.UNAUTHORIZED, "Unauthorized");
             }
             List<OrderEntity> orders = orderRepository.findAll();
-            for (OrderEntity order : orders) {
-                order.setOrderItems(orderItemRepository.findAllByOrderId(order.getId()));
-            }
+            // for (OrderEntity order : orders) {
+            //     order.setOrderItems(orderItemRepository.findAllByOrderId(order.getId()));
+            // }
             return customJSONResponse.returnStatusAndMessage(HttpStatus.OK, "All Orders retrieved", orders, orders.size());
         }
         catch (Exception e) {

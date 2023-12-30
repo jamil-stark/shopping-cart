@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 public class OrderItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Long orderItemId;
 
     @JsonIgnore
