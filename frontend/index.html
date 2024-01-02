@@ -112,7 +112,6 @@
               <i class="fas fa-shopping-cart"></i> Cart
             </a>
           </li>
-          <!-- orders -->
           <li class="nav-item">
             <a class="nav-link" href="orders.html">Orders</a>
           </li>
@@ -343,11 +342,9 @@
         });
 
         document.getElementById("continueBtn").addEventListener("click", function () {
-  // Show the spinner when the button is clicked
   const spinner = document.querySelector(".spinner-border");
   spinner.style.display = "inline-block";
 
-  // The existing logic to send data to the server remains unchanged
   const authToken = localStorage.getItem('authToken');
   const requestBody = cartItems.map(item => ({
     productId: parseInt(item.productId, 10),
@@ -364,15 +361,11 @@
       window.location.href = 'confirmOrder.html'; 
       cartItems = [];
       updateCartDisplay();
-
-      // Hide the spinner after processing is complete
       spinner.style.display = "none";
     })
     .catch(error => {
       console.log(requestBody);
       console.error('Error sending items to server:', error);
-
-      // Hide the spinner if an error occurs
       spinner.style.display = "none";
     });
 });
