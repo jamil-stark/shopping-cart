@@ -39,6 +39,8 @@ public class CartService {
     public ResponseEntity<Map<String, Object>> createCart(@RequestBody List<CartItemRequest> cartItems, String token) {
         try {
             System.out.println(cartItems);
+            // first clear the cart if it exists
+
             UserEntity user = validateTokenAndGetUser(token);
             Optional<CartEntity> cartOptional = cartRepository.findByUserId(user.getId());
             if (cartOptional.isPresent()) {
@@ -68,8 +70,23 @@ public class CartService {
                     cartItem.setQuantity(cartItemRequest.getQuantity());
                     cartItemRepository.save(cartItem);
                 }
+                // delete all cartItems whose id was not in the request
+
 
                 List<CartItemEntity> cartItemsList = cartItemRepository.findAllByCartId(cartOptional.get().getId());
+                for (CartItemEntity cartItem : cartItemsList) {
+                    boolean found = false;
+                    for (CartItemRequest cartItemRequest : cartItems) {
+                        if (cartItemRequest.getProductId() == cartItem.getProduct().getId()) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        cartItemRepository.delete(cartItem);
+                    }
+                }
+                cartItemsList = cartItemRepository.findAllByCartId(cartOptional.get().getId());
                 return customJSONResponse.returnStatusAndMessage(
                         HttpStatus.CREATED,
                         "Cart created successfully",

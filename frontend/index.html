@@ -112,6 +112,10 @@
               <i class="fas fa-shopping-cart"></i> Cart
             </a>
           </li>
+          <!-- orders -->
+          <li class="nav-item">
+            <a class="nav-link" href="orders.html">Orders</a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -157,7 +161,15 @@
             >
               Continue Shopping
             </button>
-            <button type="button" class="btn btn-primary">Continue</button>
+            <button type="button" class="btn btn-primary" id="continueBtn">
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+                style="display: none"
+              ></span>
+              Continue
+            </button>
           </div>
         </div>
       </div>
@@ -298,7 +310,44 @@
         });
       }
 
-document.querySelector(".btn.btn-primary").addEventListener("click", function () {
+      document
+        .querySelector(".btn.btn-primary")
+        .addEventListener("click", function () {
+          const authToken = localStorage.getItem("authToken");
+          const requestBody = cartItems.map((item) => ({
+            productId: parseInt(item.productId, 10),
+            quantity: item.quantity,
+          }));
+
+          const headers = {
+            Authorization: `Bearer ${authToken}`,
+          };
+
+          axios
+            .post("http://localhost:8080/api/v1/cart/", requestBody, {
+              headers,
+            })
+            .then((response) => {
+              console.log(
+                "Items sent to the server successfully:",
+                response.data
+              );
+              window.location.href = "confirmOrder.html";
+              cartItems = [];
+              updateCartDisplay();
+            })
+            .catch((error) => {
+              console.log(requestBody);
+              console.error("Error sending items to server:", error);
+            });
+        });
+
+        document.getElementById("continueBtn").addEventListener("click", function () {
+  // Show the spinner when the button is clicked
+  const spinner = document.querySelector(".spinner-border");
+  spinner.style.display = "inline-block";
+
+  // The existing logic to send data to the server remains unchanged
   const authToken = localStorage.getItem('authToken');
   const requestBody = cartItems.map(item => ({
     productId: parseInt(item.productId, 10),
@@ -311,13 +360,20 @@ document.querySelector(".btn.btn-primary").addEventListener("click", function ()
 
   axios.post('http://localhost:8080/api/v1/cart/', requestBody, { headers })
     .then(response => {
-      console.log('Items sent to the server successfully:', response.data);    
+      console.log('Items sent to the server successfully:', response.data);
+      window.location.href = 'confirmOrder.html'; 
       cartItems = [];
       updateCartDisplay();
+
+      // Hide the spinner after processing is complete
+      spinner.style.display = "none";
     })
     .catch(error => {
       console.log(requestBody);
       console.error('Error sending items to server:', error);
+
+      // Hide the spinner if an error occurs
+      spinner.style.display = "none";
     });
 });
 

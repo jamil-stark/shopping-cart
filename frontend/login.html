@@ -84,8 +84,10 @@
               console.log("Login successful:", response);
               const token = response.data.token;
               const fullname = response.data.data.fullname;
+              const userRole = response.data.data.role;
               localStorage.setItem("authToken", token);
               localStorage.setItem("fullname", fullname);
+              localStorage.setItem("userRole", userRole);
               window.location.href = "index.html";
             })
             .catch((error) => {

@@ -33,7 +33,9 @@ public class OrderController {
         return orderService.getOrdersAsAUser(token);
     }
 
+
     @GetMapping("all/")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<Map<String, Object>> getAllOrders(@RequestHeader(HttpHeaders.AUTHORIZATION) String token){
         return orderService.getAllOrders(token);
     }
