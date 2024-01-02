@@ -38,6 +38,7 @@ public class CartService {
 
     public ResponseEntity<Map<String, Object>> createCart(@RequestBody List<CartItemRequest> cartItems, String token) {
         try {
+            System.out.println(cartItems);
             UserEntity user = validateTokenAndGetUser(token);
             Optional<CartEntity> cartOptional = cartRepository.findByUserId(user.getId());
             if (cartOptional.isPresent()) {
